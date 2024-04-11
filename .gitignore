@@ -24,3 +24,5 @@ dist/
 
 # Miscellaneous
 *.DS_Store
+
+*_sorted.csv
