@@ -26,3 +26,6 @@ dist/
 *.DS_Store
 
 *_sorted.csv
+
+tools/stats/*
+tools/stats_moran/*
