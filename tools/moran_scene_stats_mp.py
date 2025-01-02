@@ -113,6 +113,7 @@ def main(years):
     #stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 71]
     #stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
     #stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
+
     stats_df['MASKED_PIXELS'] = (
         stats_df['CLOUD_PIXELS'] + stats_df['CIRRUS_PIXELS'] + stats_df['DILATE_PIXELS']
         + stats_df['SHADOW_PIXELS']
