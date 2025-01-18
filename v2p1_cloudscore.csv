@@ -16,6 +16,7 @@ LE07_019029_20100924,50,0,
 LC08_019032_20200115,50,0,
 LE07_019033_20000928,50,0,
 LT05_020032_19840627,30,0,
+LT05_020032_20030429,50,0,
 LE07_021031_20150515,50,0,
 LE07_021032_20080527,50,0,
 LE07_021032_20180320,50,0,
@@ -71,6 +72,7 @@ LT05_028029_19851028,50,0,
 LE07_028030_20030328,50,0,
 LT05_028032_19980610,50,0,
 LE07_028032_20120116,50,0,
+LT05_028033_19960503,50,0,
 LE07_028034_20000319,50,0,
 LE07_028034_20190204,50,0,
 LT05_028035_20001224,50,0,
@@ -177,6 +179,7 @@ LT05_042034_20110208,50,0,projects/openet/assets/features/masks/central_valley_z
 LT05_042034_20111107,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20111217,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20121203,50,0,projects/openet/assets/features/masks/central_valley_zone11
+LE07_042034_20130104,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20130205,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20141123,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20141225,50,0,projects/openet/assets/features/masks/central_valley_zone11
@@ -184,6 +187,7 @@ LC08_042034_20150118,50,0,projects/openet/assets/features/masks/central_valley_z
 LC08_042034_20150219,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LC08_042034_20161206,0,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20170115,20,0,projects/openet/assets/features/masks/central_valley_zone11
+LE07_042034_20170131,40,0,projects/openet/assets/features/masks/central_valley_zone11
 LC08_042034_20181212,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LC08_042034_20181228,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042034_20200108,50,0,projects/openet/assets/features/masks/central_valley_zone11
