@@ -31,7 +31,7 @@ ee.Initialize(
 
 
 def main(years):
-    count_threshold_pct_min = 0
+    count_threshold_pct_min = 70
     count_threshold_pct_max = 101
 
     years = sorted([
@@ -47,18 +47,28 @@ def main(years):
     output_ws = os.path.join(os.getcwd(), 'stats_moran')
 
     
-    # Use the OpenET ssebop collection for building the WRS2 list for now
+    # # Use the OpenET ssebop collection for building the WRS2 list for now
+    # wrs2_list = sorted(
+    #     # ee.ImageCollection('projects/openet/assets/ssebop/conus/gridmet/landsat/c02')
+    #     # ee.ImageCollection('projects/openet/assets/intercomparison/ssebop/landsat/c02/v0p2p6')
+    #     ee.ImageCollection('projects/usgs-gee-nhm-ssebop/assets/ssebop/landsat/c02')
+    #     .filterDate('2020-01-01', '2024-01-01')
+    #     .aggregate_histogram('wrs2_tile').keys().getInfo(),
+    #     reverse=True
+    # )
+    # wrs2_list = wrs2_list + ['p018r028']
+
+    # Process all WRS2 tiles in the study area
     wrs2_list = sorted(
-        # ee.ImageCollection('projects/openet/assets/ssebop/conus/gridmet/landsat/c02')
-        # ee.ImageCollection('projects/openet/assets/intercomparison/ssebop/landsat/c02/v0p2p6')
-        ee.ImageCollection('projects/usgs-gee-nhm-ssebop/assets/ssebop/landsat/c02')
-        .filterDate('2020-01-01', '2024-01-01')
+        ee.FeatureCollection('projects/openet/assets/features/wrs2/custom')
+        .filterBounds(ee.Geometry.BBox(-124, 26, -68, 50))
+        .filter(ee.Filter.inList('mgrs_tile', ['p10r030']).Not())
         .aggregate_histogram('wrs2_tile').keys().getInfo(),
         reverse=True
     )
-    wrs2_list = wrs2_list + ['p018r028']
+    print(len(wrs2_list))
+    
     # print('WRS2 tile count: {}'.format(len(wrs2_list)))
-
     
     print('\nReading skip lists')
     scene_skip_url = '../../scene-skip-list/v2p1.csv'
