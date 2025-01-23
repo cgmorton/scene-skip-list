@@ -31,7 +31,9 @@ ee.Initialize(
 
 
 def main(years):
-    count_threshold_pct_min = 70
+    #count_threshold_pct_min = 0
+    #count_threshold_pct_min = 50
+    count_threshold_pct_min = 95
     count_threshold_pct_max = 101
 
     years = sorted([
@@ -62,7 +64,7 @@ def main(years):
     wrs2_list = sorted(
         ee.FeatureCollection('projects/openet/assets/features/wrs2/custom')
         .filterBounds(ee.Geometry.BBox(-124, 26, -68, 50))
-        .filter(ee.Filter.inList('mgrs_tile', ['p10r030']).Not())
+        .filter(ee.Filter.inList('wrs2_tile', ['p10r030']).Not())
         .aggregate_histogram('wrs2_tile').keys().getInfo(),
         reverse=True
     )
@@ -120,7 +122,7 @@ def main(years):
             stats_df_list.append(wrs2_stats_df)
             wrs2_stats_df = None
     stats_df = pd.concat(stats_df_list)
-    #stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 71]
+    stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 71]
     #stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
     #stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
 
@@ -194,7 +196,7 @@ def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min
         .filterDate(start_date, end_date)
         #.filter(ee.Filter.calendarRange(year, year, 'year'))
         #.filter(ee.Filter.calendarRange(start_month, end_month, 'month'))
-        .filterBounds(ee.Geometry.BBox(-125, 25, -65, 50))
+        .filterBounds(ee.Geometry.BBox(-124, 25, -65, 50))
         .filter(ee.Filter.gte('CLOUD_COVER_LAND', cloud_cover_min))
         .filter(ee.Filter.lt('CLOUD_COVER_LAND', cloud_cover_max))
     )
@@ -203,7 +205,7 @@ def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min
         .filterDate(start_date, end_date)
         #.filter(ee.Filter.calendarRange(year, year, 'year'))
         #.filter(ee.Filter.calendarRange(start_month, end_month, 'month'))
-        .filterBounds(ee.Geometry.BBox(-125, 25, -65, 50))
+        .filterBounds(ee.Geometry.BBox(-124, 25, -65, 50))
         .filter(ee.Filter.gte('CLOUD_COVER_LAND', cloud_cover_min))
         .filter(ee.Filter.lt('CLOUD_COVER_LAND', cloud_cover_max))
     )
@@ -212,7 +214,7 @@ def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min
         .filterDate(start_date, end_date)
         #.filter(ee.Filter.calendarRange(year, year, 'year'))
         #.filter(ee.Filter.calendarRange(start_month, end_month, 'month'))
-        .filterBounds(ee.Geometry.BBox(-125, 25, -65, 50))
+        .filterBounds(ee.Geometry.BBox(-124, 25, -65, 50))
         .filter(ee.Filter.gte('CLOUD_COVER_LAND', cloud_cover_min))
         .filter(ee.Filter.lt('CLOUD_COVER_LAND', cloud_cover_max))
     )
@@ -221,7 +223,7 @@ def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min
         .filterDate(start_date, end_date)
         #.filter(ee.Filter.calendarRange(year, year, 'year'))
         #.filter(ee.Filter.calendarRange(start_month, end_month, 'month'))
-        .filterBounds(ee.Geometry.BBox(-125, 25, -65, 50))
+        .filterBounds(ee.Geometry.BBox(-124, 25, -65, 50))
         .filter(ee.Filter.gte('CLOUD_COVER_LAND', cloud_cover_min))
         .filter(ee.Filter.lt('CLOUD_COVER_LAND', cloud_cover_max))
     )
@@ -230,7 +232,7 @@ def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min
         .filterDate(start_date, end_date)
         #.filter(ee.Filter.calendarRange(year, year, 'year'))
         #.filter(ee.Filter.calendarRange(start_month, end_month, 'month'))
-        .filterBounds(ee.Geometry.BBox(-125, 25, -65, 50))
+        .filterBounds(ee.Geometry.BBox(-124, 25, -65, 50))
         .filter(ee.Filter.gte('CLOUD_COVER_LAND', cloud_cover_min))
         .filter(ee.Filter.lt('CLOUD_COVER_LAND', cloud_cover_max))
     )
