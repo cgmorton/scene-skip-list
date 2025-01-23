@@ -30,7 +30,7 @@ ee.Initialize(
 )
 
 
-def main(years, pct_min=70, pct_max=90):
+def main(years, count_threshold_pct_min=70, count_threshold_pct_max=90):
     years = sorted([y for year_str in years for y in utils.str_ranges_2_list(year_str)])
 
     start_month = 1
@@ -653,4 +653,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=args.loglevel, format='%(message)s')
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
-    main(years=args.years, pct_min=args.min, pct_max=args.max)
+    main(years=args.years, count_threshold_pct_min=args.min, count_threshold_pct_max=args.max)
