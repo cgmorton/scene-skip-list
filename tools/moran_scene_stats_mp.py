@@ -30,16 +30,8 @@ ee.Initialize(
 )
 
 
-def main(years):
-    #count_threshold_pct_min = 0
-    #count_threshold_pct_min = 50
-    count_threshold_pct_min = 95
-    count_threshold_pct_max = 101
-
-    years = sorted([
-        year for year_str in years
-        for year in utils.str_ranges_2_list(year_str)
-    ])
+def main(years, pct_min=70, pct_max=90):
+    years = sorted([y for year_str in years for y in utils.str_ranges_2_list(year_str)])
 
     start_month = 1
     end_month = 12
@@ -63,8 +55,9 @@ def main(years):
     # Process all WRS2 tiles in the study area
     wrs2_list = sorted(
         ee.FeatureCollection('projects/openet/assets/features/wrs2/custom')
-        .filterBounds(ee.Geometry.BBox(-124, 26, -68, 50))
-        .filter(ee.Filter.inList('wrs2_tile', ['p10r030']).Not())
+        #.filterBounds(ee.Geometry.BBox(-124, 26, -68, 50))
+        .filterBounds(ee.Geometry.BBox(-127, 24, -63, 52))
+        #.filter(ee.Filter.inList('wrs2_tile', ['p10r030']).Not())
         .aggregate_histogram('wrs2_tile').keys().getInfo(),
         reverse=True
     )
@@ -122,9 +115,11 @@ def main(years):
             stats_df_list.append(wrs2_stats_df)
             wrs2_stats_df = None
     stats_df = pd.concat(stats_df_list)
+
+    # Pre-filter the scene list
     stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 71]
-    #stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
-    #stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
+    stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
+    stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
 
     stats_df['MASKED_PIXELS'] = (
         stats_df['CLOUD_PIXELS'] + stats_df['CIRRUS_PIXELS'] + stats_df['DILATE_PIXELS']
@@ -186,7 +181,7 @@ def main(years):
         print('  Closing pool')
 
 
-def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min=0, cloud_cover_max=101):
+def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min=-0.5, cloud_cover_max=101):
     """"""
     start_date = ee.Date.fromYMD(year, start_month, 1)
     end_date = ee.Date.fromYMD(year, end_month, 1).advance(1, 'month')
@@ -642,17 +637,10 @@ def arg_parse():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         '--years', nargs='+', help='Comma separated list and/or range of years')
-    # parser.add_argument(
-    #     '--key', type=utils.arg_valid_file,
-    #     help='JSON key file', metavar='FILE')
-    # parser.add_argument(
-    #     '--project', default=None,
-    #     help='Google cloud project ID to use for GEE authentication')
-    # parser.add_argument(
-    #     '--regex', help='Regular expression for filtering task IDs')
-    # parser.add_argument(
-    #     '--reverse', default=False, action='store_true',
-    #     help='Process WRS2 tiles in reverse order')
+    parser.add_argument(
+        '--min', type=int, help='Minimum cloud cover percentage', metavar='%', default=70)
+    parser.add_argument(
+        '--max', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
     parser.add_argument(
         '--debug', default=logging.INFO, const=logging.DEBUG,
         help='Debug level logging', action='store_const', dest='loglevel')
@@ -665,4 +653,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=args.loglevel, format='%(message)s')
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
-    main(years=args.years)
+    main(years=args.years, pct_min=args.min, pct_max=args.max)
