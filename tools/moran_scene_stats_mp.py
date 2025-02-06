@@ -30,16 +30,20 @@ ee.Initialize(
 )
 
 
-def main(years, count_threshold_pct_min=70, count_threshold_pct_max=90):
+def main(
+        years,
+        start_month=1,
+        end_month=12,
+        overwrite_flag=False,
+        count_threshold_pct_min=70,
+        count_threshold_pct_max=90,
+        skip_list_filter_flag=False,
+        cloudcover_filter_flag=True,
+):
     years = sorted([y for year_str in years for y in utils.str_ranges_2_list(year_str)])
-
-    start_month = 1
-    end_month = 12
-    overwrite_flag = False
 
     stats_csv_ws = os.path.join(os.getcwd(), 'stats')
     output_ws = os.path.join(os.getcwd(), 'stats_moran')
-
     
     # # Use the OpenET ssebop collection for building the WRS2 list for now
     # wrs2_list = sorted(
@@ -117,10 +121,13 @@ def main(years, count_threshold_pct_min=70, count_threshold_pct_max=90):
     stats_df = pd.concat(stats_df_list)
 
     # Pre-filter the scene list
-    stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 71]
-    stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
-    stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
+    if cloudcover_filter_flag:
+        stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 80]
+        stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
+    if skip_list_filter_flag:
+        stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
 
+    # Compute the stats
     stats_df['MASKED_PIXELS'] = (
         stats_df['CLOUD_PIXELS'] + stats_df['CIRRUS_PIXELS'] + stats_df['DILATE_PIXELS']
         + stats_df['SHADOW_PIXELS']
@@ -133,20 +140,10 @@ def main(years, count_threshold_pct_min=70, count_threshold_pct_max=90):
     stats_df = stats_df[stats_df['CLOUD_COUNT_RATIO'] < (count_threshold_pct_max / 100)]
     stats_df = stats_df[stats_df['CLOUD_COUNT_RATIO'] >= (count_threshold_pct_min / 100)]
 
+    # Build the scene list
     scene_id_list = [row["SCENE_ID"].upper() for i, row in stats_df.iterrows()]
     random.shuffle(scene_id_list)
-    print('  Scene count: {}'.format(len(scene_id_list)))
-
-    
-    # # Build the initial image ID list from the collections
-    # print('\nBuilding scene ID list')
-    # scene_id_list = []
-    # for year in sorted(years, reverse=False):
-    #     print(f'  {year} - {start_month:>2d} {end_month>2d}')
-    #     scene_id_list.extend(get_scene_ids(
-    #         year, wrs2_list, start_month, end_month, cloud_cover_min=68, cloud_cover_max=71
-    #     ))
-    # print('Image count: {}'.format(len(scene_id_list)))
+    print(f'  Scene count: {len(scene_id_list)}')
 
 
     # Build the input list
@@ -164,7 +161,6 @@ def main(years, count_threshold_pct_min=70, count_threshold_pct_max=90):
         inputs.append([index, scene_id, file_path])
         index += 1
     print('\nInput count: {}'.format(len(inputs)))
-    # input('ENTER')
 
     
     # Build the output month folders if needed
