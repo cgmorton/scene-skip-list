@@ -38,7 +38,7 @@ def main(
         count_threshold_pct_min=70,
         count_threshold_pct_max=90,
         skip_list_filter_flag=False,
-        cloudcover_filter_flag=True,
+        cloudcover_filter_flag=False,
 ):
     years = sorted([y for year_str in years for y in utils.str_ranges_2_list(year_str)])
 
@@ -637,6 +637,8 @@ def arg_parse():
         '--min', type=int, help='Minimum cloud cover percentage', metavar='%', default=70)
     parser.add_argument(
         '--max', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
+    # parser.add_argument(
+    #     '--no_cloudcover', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
     parser.add_argument(
         '--debug', default=logging.INFO, const=logging.DEBUG,
         help='Debug level logging', action='store_const', dest='loglevel')
@@ -649,4 +651,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=args.loglevel, format='%(message)s')
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
-    main(years=args.years, count_threshold_pct_min=args.min, count_threshold_pct_max=args.max)
+    main(
+        years=args.years,
+        count_threshold_pct_min=args.min,
+        count_threshold_pct_max=args.max,
+    )
