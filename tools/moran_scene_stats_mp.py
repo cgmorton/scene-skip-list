@@ -35,8 +35,8 @@ def main(
         start_month=1,
         end_month=12,
         overwrite_flag=False,
-        count_threshold_pct_min=70,
-        count_threshold_pct_max=90,
+        count_threshold_pct_min=0,
+        count_threshold_pct_max=101,
         skip_list_filter_flag=False,
         cloudcover_filter_flag=False,
 ):
@@ -634,9 +634,9 @@ def arg_parse():
     parser.add_argument(
         '--years', nargs='+', help='Comma separated list and/or range of years')
     parser.add_argument(
-        '--min', type=int, help='Minimum cloud cover percentage', metavar='%', default=70)
+        '--min', type=int, help='Minimum cloud cover percentage', metavar='%', default=0)
     parser.add_argument(
-        '--max', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
+        '--max', type=float, help='Maximum cloud cover percentage', metavar='%', default=101)
     # parser.add_argument(
     #     '--no_cloudcover', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
     parser.add_argument(
