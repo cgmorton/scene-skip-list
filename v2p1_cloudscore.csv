@@ -99,6 +99,7 @@ LT05_028033_19960503,50,0,
 LE07_028034_20000319,50,0,
 LE07_028034_20190204,50,0,
 LT05_028035_20001224,50,0,
+LC08_028036_20251213,50,0,
 LE07_029035_20210608,50,0,
 LT05_028036_20001224,50,0,
 LE07_028037_20001013,50,0,
@@ -236,6 +237,10 @@ LC08_042034_20221223,50,0,projects/openet/assets/features/masks/central_valley_z
 LC09_042034_20240103,0,0,projects/openet/assets/features/masks/central_valley_zone11
 LC09_042034_20241204,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LC09_042034_20241220,50,0,projects/openet/assets/features/masks/central_valley_zone11
+LC09_042034_20260108,50,0,projects/openet/assets/features/masks/central_valley_zone11
+LC08_042034_20260116,50,0,projects/openet/assets/features/masks/central_valley_zone11
+LC09_042034_20260124,50,0,projects/openet/assets/features/masks/central_valley_zone11
+LC08_042034_20260201,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LT05_042035_19870902,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LE07_042035_20030314,50,0,projects/openet/assets/features/masks/central_valley_zone11
 LT05_042035_20050106,50,0,projects/openet/assets/features/masks/central_valley_zone11
@@ -275,9 +280,11 @@ LE07_043033_20210101,50,0,projects/openet/assets/features/masks/central_valley_z
 LC08_043033_20210109,50,0,projects/openet/assets/features/masks/central_valley_zone10
 LE07_043033_20211117,50,0,projects/openet/assets/features/masks/central_valley_zone10
 LE07_043033_20211203,50,0,projects/openet/assets/features/masks/central_valley_zone10
-LC09_043033_20231107,50,0
+LC09_043033_20231107,50,0,projects/openet/assets/features/masks/central_valley_zone10
 LC08_043033_20241219,50,0,projects/openet/assets/features/masks/central_valley_zone10
 LC09_043033_20241227,50,0,projects/openet/assets/features/masks/central_valley_zone10
+LC09_043033_20251027,50,0,projects/openet/assets/features/masks/central_valley_zone10
+LC08_043033_20260123,50,0,projects/openet/assets/features/masks/central_valley_zone10
 LT05_043034_19951220,50,0,
 LE07_043034_20051223,50,0,
 LC08_043034_20160112,50,0,
