@@ -24,13 +24,9 @@ Download the stats files from the bucket
     
 """
 
-ee.Initialize(
-    project='ee-cmorton',
-    opt_url='https://earthengine-highvolume.googleapis.com',
-)
-
 
 def main(
+        project_id,
         years,
         start_month=1,
         end_month=12,
@@ -39,12 +35,18 @@ def main(
         count_threshold_pct_max=101,
         skip_list_filter_flag=False,
         cloudcover_filter_flag=False,
+        mp=10,
 ):
+    """
+
+    """
     years = sorted([y for year_str in years for y in utils.str_ranges_2_list(year_str)])
 
     stats_csv_ws = os.path.join(os.getcwd(), 'stats')
     output_ws = os.path.join(os.getcwd(), 'stats_moran')
-    
+
+    ee.Initialize(project=project_id, opt_url='https://earthengine-highvolume.googleapis.com')
+
     # # Use the OpenET ssebop collection for building the WRS2 list for now
     # wrs2_list = sorted(
     #     # ee.ImageCollection('projects/openet/assets/ssebop/conus/gridmet/landsat/c02')
@@ -170,11 +172,21 @@ def main(
 
     # Compute
     if inputs:
-        pool = multiprocessing.Pool(20)
-        pool.starmap(write_json, inputs)
-        pool.close()
-        pool.join()
-        print('  Closing pool')
+        if mp == 1:
+            for index, scene_id, file_name in inputs:
+                write_json(index, scene_id, file_name)
+        elif mp > 1:
+            with multiprocessing.Pool(
+                    processes=mp,
+                    initializer=ee_initializer,
+                    initargs=(project_id, 'https://earthengine-highvolume.googleapis.com')
+            ) as p:
+                output = p.starmap(write_json, inputs)
+            # pool = multiprocessing.Pool(mp)
+            # pool.starmap(write_json, inputs)
+            # pool.close()
+            # pool.join()
+            # print('  Closing pool')
 
 
 def get_scene_ids(year, wrs2_tiles, start_month=1, end_month=12, cloud_cover_min=-0.5, cloud_cover_max=101):
@@ -399,6 +411,11 @@ def compute_moran_stats(scene_id, scale):
     output_stats = default_stats.combine(grid_stats, overwrite=True)
     
     return ee.Feature(None, output_stats)
+
+
+def ee_initializer(project_id, opt_url='https://earthengine-highvolume.googleapis.com'):
+    # ee.Initialize(ee.ServiceAccountCredentials('_', key_file='key.json'), opt_url=opt_url)
+    ee.Initialize(project=project_id, opt_url=opt_url)
 
 
 def write_json(index, scene_id, file_name):
@@ -632,13 +649,17 @@ def arg_parse():
         description='Moran I Scene Stats',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
+        '--project', required=True,
+        help='Google cloud project ID to use for GEE authentication')
+    parser.add_argument(
         '--years', nargs='+', help='Comma separated list and/or range of years')
     parser.add_argument(
         '--min', type=int, help='Minimum cloud cover percentage', metavar='%', default=0)
     parser.add_argument(
         '--max', type=float, help='Maximum cloud cover percentage', metavar='%', default=101)
-    # parser.add_argument(
-    #     '--no_cloudcover', type=float, help='Maximum cloud cover percentage', metavar='%', default=90)
+    parser.add_argument(
+        '--mp', type=int, default=10, help='Number of parallel processes')
+
     parser.add_argument(
         '--debug', default=logging.INFO, const=logging.DEBUG,
         help='Debug level logging', action='store_const', dest='loglevel')
@@ -652,7 +673,9 @@ if __name__ == '__main__':
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
     main(
+        project_id=args.project,
         years=args.years,
         count_threshold_pct_min=args.min,
         count_threshold_pct_max=args.max,
+        mp=args.mp,
     )
