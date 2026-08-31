@@ -47,23 +47,43 @@ def main(
 
     ee.Initialize(project=project_id, opt_url='https://earthengine-highvolume.googleapis.com')
 
-    # # Use the OpenET ssebop collection for building the WRS2 list for now
-    # wrs2_list = sorted(
-    #     # ee.ImageCollection('projects/openet/assets/ssebop/conus/gridmet/landsat/c02')
-    #     # ee.ImageCollection('projects/openet/assets/intercomparison/ssebop/landsat/c02/v0p2p6')
-    #     ee.ImageCollection('projects/usgs-gee-nhm-ssebop/assets/ssebop/landsat/c02')
-    #     .filterDate('2020-01-01', '2024-01-01')
-    #     .aggregate_histogram('wrs2_tile').keys().getInfo(),
-    #     reverse=True
-    # )
-    # wrs2_list = wrs2_list + ['p018r028']
+    wrs2_skip_list = [
+        'p050r026',  # Vancouver Island
+        'p048r028',  # OR/WA Coast
+        'p042r037',  # San Nicholas Island, California
+        'p040r040', 'p039r040',  # Isla Guadalupe
+        'p038r043', 'p036r043',  # Baja coast
+        'p019r040', 'p018r040',  # West Florida coast
+        'p016r043', 'p015r043',  # South Florida coast
+        'p014r041', 'p014r042', 'p014r043',  # East Florida coast
+        'p013r034', 'p013r035', 'p013r036',  # North Carolina Outer Banks
+        'p011r032',  # Rhode Island coast
+        'p010r030',  # Maine
+        # Caribbean tiles
+        'p013r041', 'p013r042', 'p013r043',  # Bahamas
+        'p012r042', 'p012r043', 'p011r042', 'p011r043',  # Bahamas
+        'p006r037', 'p006r038',  # Bermuda
+        'p017r044', 'p016r044', 'p015r044', 'p014r044',  # Cuba
+        'p013r044', 'p012r044', 'p011r044', 'p010r044',  # Cuba/Bahamas
+    ]
+
+    wrs2_path_skip_list = [
+        1, 2, 3, 4, 5, 6,
+        7, 8, 9,
+        51, 52, 53, 54, 55
+    ]
+    wrs2_row_skip_list = [
+        20, 21, 22, 23, 24,
+        44, 45
+    ]
 
     # Process all WRS2 tiles in the study area
     wrs2_list = sorted(
         ee.FeatureCollection('projects/openet/assets/features/wrs2/custom')
-        #.filterBounds(ee.Geometry.BBox(-124, 26, -68, 50))
-        .filterBounds(ee.Geometry.BBox(-127, 24, -63, 52))
-        #.filter(ee.Filter.inList('wrs2_tile', ['p10r030']).Not())
+        .filterBounds(ee.Geometry.BBox(-127, 24.5, -65, 51))
+        .filter(ee.Filter.inList('wrs2_tile', wrs2_skip_list).Not())
+        .filter(ee.Filter.inList('wrs2_path', wrs2_path_skip_list).Not())
+        .filter(ee.Filter.inList('wrs2_row', wrs2_row_skip_list).Not())
         .aggregate_histogram('wrs2_tile').keys().getInfo(),
         reverse=True
     )
@@ -124,7 +144,7 @@ def main(
 
     # Pre-filter the scene list
     if cloudcover_filter_flag:
-        stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 80]
+        stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] < 72]
         stats_df = stats_df[stats_df['CLOUD_COVER_LAND'] >= 0]
     if skip_list_filter_flag:
         stats_df = stats_df[~stats_df['SCENE_ID'].isin(scene_skip_list)]
