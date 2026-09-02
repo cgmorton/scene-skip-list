@@ -49,22 +49,22 @@ def main(
 
     wrs2_skip_list = [
         'p050r026',  # Vancouver Island
-        'p048r028',  # OR/WA Coast
+        'p048r028',  # Oregon / Washington coast
         'p042r037',  # San Nicholas Island, California
         'p040r040', 'p039r040',  # Isla Guadalupe
         'p038r043', 'p036r043',  # Baja coast
         'p019r040', 'p018r040',  # West Florida coast
         'p016r043', 'p015r043',  # South Florida coast
-        'p014r041', 'p014r042', 'p014r043',  # East Florida coast
+        'p014r041', 'p014r042', 'p014r043',  # East Florida coast / Bahamas
         'p013r034', 'p013r035', 'p013r036',  # North Carolina Outer Banks
         'p011r032',  # Rhode Island coast
-        'p010r030',  # Maine
+        'p010r030',  # Maine coast
         # Caribbean tiles
         'p013r041', 'p013r042', 'p013r043',  # Bahamas
         'p012r042', 'p012r043', 'p011r042', 'p011r043',  # Bahamas
         'p006r037', 'p006r038',  # Bermuda
         'p017r044', 'p016r044', 'p015r044', 'p014r044',  # Cuba
-        'p013r044', 'p012r044', 'p011r044', 'p010r044',  # Cuba/Bahamas
+        'p013r044', 'p012r044', 'p011r044', 'p010r044',  # Cuba / Bahamas
     ]
 
     wrs2_path_skip_list = [
