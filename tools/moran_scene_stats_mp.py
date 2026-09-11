@@ -45,7 +45,8 @@ def main(
     stats_csv_ws = os.path.join(os.getcwd(), 'stats')
     output_ws = os.path.join(os.getcwd(), 'stats_moran')
 
-    ee.Initialize(project=project_id, opt_url='https://earthengine-highvolume.googleapis.com')
+    ee.Initialize(project=project_id)
+    # ee.Initialize(project=project_id, opt_url='https://earthengine-highvolume.googleapis.com')
 
     wrs2_skip_list = [
         'p050r026',  # Vancouver Island
